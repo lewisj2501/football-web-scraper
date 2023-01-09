@@ -1,6 +1,7 @@
 # working from branch lewis
 
 import requests
+import html
 from bs4 import BeautifulSoup
 
 # create the URL to the page you want to scrape
@@ -13,13 +14,20 @@ response = requests.get(url)
 soup = BeautifulSoup(response.text, 'html.parser')
 
 # finds table class with meta data associated with all the teams in the premier league
-teamsList_1 = soup.find_all(class_ = "standard_tabelle")
-
-# Make the http request to worldfootball.net
+column_headers = soup.find_all("th")
+row_data = soup.find_all('table', class_='standard_tabelle')
 
 # Check the status code to make sure the request was successful
 if response.status_code == 200:
-    for team1 in teamsList_1:
-        print(team1)
+    for row in row_data:
+        data = row.text.split()
+        col1 = data[0]
+        col2 = data[1]
+        col3 = data[2]
+        col4 = data[3]
+        col5 = data[4]
+        print(data)
+        print('break')
+
 else:
     print("Request failed with status code:", response.status_code)
